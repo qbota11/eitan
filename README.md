@@ -7,6 +7,7 @@
 テキストファイルを読み込んで、その中に含まれている英単語を抽出します。
 ## meaning.py
 抽出した単語の意味を調べます。
+[https://bond-lab.github.io/wnja/](https://bond-lab.github.io/wnja/ "https://bond-lab.github.io/wnja/") からwnjpn.dbをダンロードする必要があります。
 ## example.py
 抽出した単語をもとにChatGPTに例文を作って貰います。
 ## translation.py
