@@ -1,5 +1,5 @@
 # eitan
-[https://ja.mondder.com/list?id=86](https://ja.mondder.com/list?id=86 "大学受験の英単語")を作った際に使用したコード群です。
+[https://ja.mondder.com/questions?id=472](https://ja.mondder.com/questions?id=472 "大学受験の英単語")を作った際に使用したコード群です。
 ## mydb.py
 量が多くて大変だったのでとりあえずデータベース（mysql）に貯めておくことになってます。
 テーブルの定義が書いてあるので、テーブルを立て接続情報を書き換えてください。
