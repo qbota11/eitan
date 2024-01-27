@@ -47,10 +47,10 @@ def makeQuestionCSV(pattern):
             pool = r_pool
         correct_position = random.randrange(1,5)
         if pattern == "英日":
-            q = "[b]"+row["gen"]+"[/b]の意味として最も適したものを一つ選んで下さい。"
+            q = "<b>"+row["gen"]+"</b>の意味として最も適したものを一つ選んで下さい。"
         elif pattern == "日英":
               meaning = row["meaning"].replace(",","%(=)%")
-              q = "[b]"+meaning+"[/b]に対応する英単語として最も適したものを一つ選んでください。"
+              q = "<b>"+meaning+"</b>に対応する英単語として最も適したものを一つ選んでください。"
         options = ""
         for n in range(1,6):
             if n == correct_position:
@@ -76,32 +76,32 @@ def makeOption(row,pattern):
     meaning = row["meaning"].replace(",","%(=)%")
     pos = ""
     for hin in row["pos"].split(","):
-        pos += "[span style='border:1px #cdc4c4 solid;border-radius:5px;font-size:0.8rem;padding:0.1rem;background-color:#ebeeee;margin:0 0.2rem;']"+hin+"[/span]"
+        pos += "<span style='border:1px #cdc4c4 solid;border-radius:5px;font-size:0.8rem;padding:0.1rem;background-color:#ebeeee;margin:0 0.2rem;'>"+hin+"</span>"
     word_list = row["words"].split(",")
     if row["gen"] not in word_list:
         word_list.append(row["gen"])
     tan = ""
     word_list.sort(key=len)
     for t in word_list:
-        tan += "[span style='margin-right:0.5rem;']"+t+"[/span]"
+        tan += "<span style='margin-right:0.5rem;'>"+t+"</span>"
     if pattern == "英日":
         option = meaning +"**+-+**"+"使用例: "+pos+tan+","
     elif pattern == "日英":
-        meaning = "[p]意味: "+meaning.replace(",","%(=)%")+"[/p]"
-        option = row["gen"] +"**+-+**"+"[p]使用例: "+pos+tan+"[/p]"+meaning+","
+        meaning = "<p>意味: "+meaning.replace(",","%(=)%")+"</p>"
+        option = row["gen"] +"**+-+**"+"<p>使用例: "+pos+tan+"</p>"+meaning+","
 
     return option
 def makeCommentary(row):
     text= ""
-    t1 = f"[p]{row['gen']}を使って簡単な英文を作って下さい。[/p]"
+    t1 = f"<p>{row['gen']}を使って簡単な英文を作って下さい。</p>"
     text +=  setBloon(t1,"https://ja.mondder.com/public/users/2023/4/11681359885.webp","Mondder","l")
     t2 = setPTag(row['example'])
     text +=  setBloon(t2,"https://ja.mondder.com/public/users/2023/4/11681360375.webp","ChatGPT","r")
-    t3 = f"[p]この例文に使われている単語の品詞を判定して下さい。[/p]"
+    t3 = f"<p>この例文に使われている単語の品詞を判定して下さい。</p>"
     text +=  setBloon(t3,"https://ja.mondder.com/public/users/2023/4/11681359885.webp","Mondder","l")
     t4 = setPOS(row['example'])
     text +=  setBloon(t4,"https://ja.mondder.com/public/users/2023/4/11681360306.webp","NLTK","r")
-    t5 = f"[p]例文を日本語に翻訳して下さい。[/p]"
+    t5 = f"<p>例文を日本語に翻訳して下さい。</p>"
     text +=  setBloon(t5,"https://ja.mondder.com/public/users/2023/4/11681359885.webp","Mondder","l")
     t6 = setPTag(row['example_yaku'])
     if len(row['example']) < 55:
@@ -119,14 +119,14 @@ def makeCommentary(row):
             source += ","
         source += src
        
-    text += "[div class='simple-box']"+source+"に登場。[/div]"
+    text += "<div class='simple-box'>"+source+"に登場。</div>"
     
     return text.replace(",","%(=)%")
 def setPTag(text):
     result = ""
     text = text.replace(",","%(=)%")
     for e  in text.split("\n"):
-        result +=  "[p]"+e+"[/p]"
+        result +=  "<p>"+e+"</p>"
     return  result
 
 
@@ -134,9 +134,9 @@ def setBloon(text,img,alt,mode):
     if len(text) <1:
         return ""
     if mode == "l":
-        return f'[div class="speech-balloon balloon-left"][img class="balloon-icon" width="50" height="50" src="{img}" alt="{alt}"][div class="balloon-talk talk-left"]{text}[/div][/div]'
+        return f'<div class="speech-balloon balloon-left"><img class="balloon-icon" width="50" height="50" src="{img}" alt="{alt}"><div class="balloon-talk talk-left">{text}</div></div>'
     else:
-         return f'[div class="speech-balloon balloon-right"][div class="balloon-talk talk-right"]{text}[/div][img class="balloon-icon" width="50" height="50" src="{img}" alt="{alt}"][/div]'
+         return f'<div class="speech-balloon balloon-right"><div class="balloon-talk talk-right">{text}</div><img class="balloon-icon" width="50" height="50" src="{img}" alt="{alt}"></div>'
 def setPOS(text):
     if len(text) <1:
         return ""
@@ -145,30 +145,30 @@ def setPOS(text):
         temp = ""
         for t in nltk.pos_tag(nltk.word_tokenize(te)):
             if t[1] in ['NN','NNS']:
-                temp += f"[ruby]{t[0]}[rp]([/rp][rt]名[/rt][rp])[/rp][/ruby] "
+                temp += f"<ruby>{t[0]}<rp>(</rp><rt>名</rt><rp>)</rp></ruby> "
             elif t[1] in ['NNP','NNPS']:
-                temp += f"[ruby]{t[0]}[rp]([/rp][rt]固[/rt][rp])[/rp][/ruby] "
+                temp += f"<ruby>{t[0]}<rp>(</rp><rt>固</rt><rp>)</rp></ruby> "
             elif t[1] in ['VB','VBD','VBG','VBN','VBP','VBZ']:
-                temp += f"[ruby]{t[0]}[rp]([/rp][rt]動[/rt][rp])[/rp][/ruby] "
+                temp += f"<ruby>{t[0]}<rp>(</rp><rt>動</rt><rp>)</rp></ruby> "
             elif t[1] in ['JJ','JJR','JJS']:
-                temp += f"[ruby]{t[0]}[rp]([/rp][rt]副[/rt][rp])[/rp][/ruby] "
+                temp += f"<ruby>{t[0]}<rp>(</rp><rt>副</rt><rp>)</rp></ruby> "
             elif t[1] in ['RB','RBR','RBS']:
-                temp += f"[ruby]{t[0]}[rp]([/rp][rt]形[/rt][rp])[/rp][/ruby] "
+                temp += f"<ruby>{t[0]}<rp>(</rp><rt>形</rt><rp>)</rp></ruby> "
             elif t[1] in ['PRP','WP']:
-                temp += f"[ruby]{t[0]}[rp]([/rp][rt]代[/rt][rp])[/rp][/ruby] "
+                temp += f"<ruby>{t[0]}<rp>(</rp><rt>代</rt><rp>)</rp></ruby> "
             elif t[1] in ['PRP$','WP$']:
-                temp += f"[ruby]{t[0]}[rp]([/rp][rt]所代[/rt][rp])[/rp][/ruby] "
+                temp += f"<ruby>{t[0]}<rp>(</rp><rt>所代</rt><rp>)</rp></ruby> "
             elif t[1] in ['IN']:
-                temp += f"[ruby]{t[0]}[rp]([/rp][rt]前接[/rt][rp])[/rp][/ruby] "
+                temp += f"<ruby>{t[0]}<rp>(</rp><rt>前接</rt><rp>)</rp></ruby> "
             elif t[1] in ['TO']:
-                temp += f"[ruby]{t[0]}[rp]([/rp][rt]前[/rt][rp])[/rp][/ruby] "
+                temp += f"<ruby>{t[0]}<rp>(</rp><rt>前</rt><rp>)</rp></ruby> "
             elif t[1] in ['DT','WDT']:
-                temp += f"[ruby]{t[0]}[rp]([/rp][rt]限[/rt][rp])[/rp][/ruby] "
+                temp += f"<ruby>{t[0]}<rp>(</rp><rt>限</rt><rp>)</rp></ruby> "
             elif t[1] in ['MD']:
-                temp += f"[ruby]{t[0]}[rp]([/rp][rt]助[/rt][rp])[/rp][/ruby] "
+                temp += f"<ruby>{t[0]}<rp>(</rp><rt>助</rt><rp>)</rp></ruby> "
             else:
-                temp += f"[span]{t[0]}[/span] "
-        result += "[p]"+temp+"[/p]"
+                temp += f"<span>{t[0]}</span> "
+        result += "<p>"+temp+"</p>"
     return result
         
 
